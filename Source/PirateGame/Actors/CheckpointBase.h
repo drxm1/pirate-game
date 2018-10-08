@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PickupBase.generated.h"
+#include "CheckpointBase.generated.h"
 
 UCLASS()
-class PIRATEGAME_API APickupBase : public AActor
+class PIRATEGAME_API ACheckpointBase : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APickupBase();
+	ACheckpointBase();
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,19 +25,20 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere)
-	USceneComponent* PickupRoot;
+	USceneComponent* CheckpointRoot;
 
 	UPROPERTY(EditAnywhere)
-	class UShapeComponent* PickupTrigger;
+	class UShapeComponent* CheckpointTrigger;
 
 	UPROPERTY(EditAnywhere)
-	class UPaperSpriteComponent* PickupSpriteComponent;
-	
-	// Not needed
+	class UPaperSpriteComponent* CheckpointSpriteComponent;
+
+	// Not needed:
 	// UPROPERTY(EditAnywhere)
 	// TSubclassOf<AActor> SpecificOverlapActorClass;
 
 public:
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 	void OnRadiusEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
 };

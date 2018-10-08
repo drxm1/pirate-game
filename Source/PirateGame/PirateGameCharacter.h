@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
+#include "Interfaces/IHaveCheckpoint.h"
 #include "PirateGameCharacterInput.h"
 #include "PirateGameCharacter.generated.h"
 
@@ -11,7 +12,7 @@
  * 
  */
 UCLASS()
-class PIRATEGAME_API APirateGameCharacter : public APaperCharacter
+class PIRATEGAME_API APirateGameCharacter : public APaperCharacter, public IHaveCheckpoint
 {
 	GENERATED_BODY()
 	
