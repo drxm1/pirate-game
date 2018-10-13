@@ -144,6 +144,9 @@ void APirateGameCharacter::OnReleasedJump()
  */
 void APirateGameCharacter::OnPressedPause()
 {
+	if (!IsAlive())
+		return;
+
 	APirateGameGameModeBase* gamemode = Cast<APirateGameGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (gamemode != nullptr)
 	{
@@ -231,7 +234,13 @@ FVector APirateGameCharacter::GetCheckpoint() const
  */
 void APirateGameCharacter::OnDie()
 {
-
+	APirateGameGameModeBase* gamemode = Cast<APirateGameGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (gamemode != nullptr)
+	{
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+		// TODO: show not the pause menu widget but the GameOver widget...
+		// gamemode->ShowPauseMenuWidget(!bIsGamePaused);
+	}
 }
 
 /** Returns the current health */

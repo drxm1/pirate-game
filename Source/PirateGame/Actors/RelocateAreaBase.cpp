@@ -42,19 +42,21 @@ void ARelocateAreaBase::Tick(float DeltaTime)
 void ARelocateAreaBase::OnRadiusEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	IHaveCheckpoint *const actorWithCheckpoint = Cast<IHaveCheckpoint>(OtherActor);
+	ICanDie *const actorWithHealth = Cast<ICanDie>(OtherActor);
 	
 	UE_LOG(RelocateAreaBaseLog, Log, TEXT("Actor entered RelocateArea"));
 
 	if (actorWithCheckpoint)
 	{
-		// Relocate the actor to the checkpoint
-		OtherActor->SetActorLocation(actorWithCheckpoint->GetCheckpoint(), false, nullptr, ETeleportType::None);
-
 		// Remove a life from the actor if the actor has health
-		ICanDie *const actorWithHealth = Cast<ICanDie>(OtherActor);
 		if (actorWithHealth)
 		{
 			actorWithHealth->LoseHealth(1);
+		}
+		// Relocate the actor to the checkpoint if the actor didn't die
+		if (actorWithHealth->IsAlive())
+		{
+			OtherActor->SetActorLocation(actorWithCheckpoint->GetCheckpoint(), false, nullptr, ETeleportType::None);
 		}
 	}
 }
