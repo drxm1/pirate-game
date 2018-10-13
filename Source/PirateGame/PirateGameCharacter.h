@@ -99,4 +99,14 @@ protected:
 	/** The animation to play while running around */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations")
 	class UPaperFlipbook* RunningAnimation;
+
+// IHaveCheckpoint implementation
+protected:
+	FVector CurrentCheckpoint;
+public:
+	/** This function sets the checkpoint to the given location */
+	void SetCheckpoint(const FVector & location);
+
+	/** This function returns the current checkpoint of this entity */
+	FVector GetCheckpoint();
 };

@@ -5,7 +5,7 @@
 #include "Components/ShapeComponent.h"
 #include "Components/BoxComponent.h"
 #include "PaperSpriteComponent.h"
-// #include "PirateGameCharacter.h"
+#include "PirateGameCharacter.h"
 #include "Interfaces/IHaveCheckpoint.h"
 
 // Sets default values
@@ -43,11 +43,12 @@ void ACheckpointBase::Tick(float DeltaTime)
 
 void ACheckpointBase::OnRadiusEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	const IHaveCheckpoint * actorWithCheckpoint = Cast<IHaveCheckpoint>(OtherActor);
+	IHaveCheckpoint *const actorWithCheckpoint = Cast<IHaveCheckpoint>(OtherActor);
 
 	if (actorWithCheckpoint)
 	{
-		OtherActor->Destroy();
+		const FVector location = this->GetActorLocation();
+		actorWithCheckpoint->SetCheckpoint(location);
 	}
 }
 

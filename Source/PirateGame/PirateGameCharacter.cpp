@@ -75,6 +75,9 @@ APirateGameCharacter::APirateGameCharacter()
 void APirateGameCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Init first checkpoint location
+	CurrentCheckpoint = GetActorLocation();
 }
 
 /** 
@@ -204,4 +207,20 @@ void APirateGameCharacter::UpdateAnimation()
 	{
 		GetSprite()->SetFlipbook(DesiredAnimation);
 	}
+}
+
+/**
+ * This function sets the checkpoint to the given location
+ */
+void APirateGameCharacter::SetCheckpoint(const FVector & location)
+{
+	CurrentCheckpoint = location;
+}
+
+/**
+ * This function returns the current checkpoint of this entity
+ */
+FVector APirateGameCharacter::GetCheckpoint()
+{
+	return CurrentCheckpoint;
 }
