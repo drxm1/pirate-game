@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "CheckpointBase.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(CheckpointBaseLog, Log, All);
+
 UCLASS()
 class PIRATEGAME_API ACheckpointBase : public AActor
 {

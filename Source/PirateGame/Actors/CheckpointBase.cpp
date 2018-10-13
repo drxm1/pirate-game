@@ -8,6 +8,8 @@
 #include "PirateGameCharacter.h"
 #include "Interfaces/IHaveCheckpoint.h"
 
+DEFINE_LOG_CATEGORY(CheckpointBaseLog);
+
 // Sets default values
 ACheckpointBase::ACheckpointBase()
 {
@@ -48,7 +50,11 @@ void ACheckpointBase::OnRadiusEnter(class UPrimitiveComponent* HitComp, class AA
 	if (actorWithCheckpoint)
 	{
 		const FVector location = this->GetActorLocation();
-		actorWithCheckpoint->SetCheckpoint(location);
+		// Only update x and z, because we don't wan't the player to move in the y-axis
+		actorWithCheckpoint->SetCheckpoint(FVector (location.X, actorWithCheckpoint->GetCheckpoint ().Y, location.Z));
+		
+		const FVector log_set_location = actorWithCheckpoint->GetCheckpoint();
+		UE_LOG(CheckpointBaseLog, Warning, TEXT("Set new Checkpoint for Actor: (%f, %f, %f)"), log_set_location.X, log_set_location.Y, log_set_location.Z);
 	}
 }
 

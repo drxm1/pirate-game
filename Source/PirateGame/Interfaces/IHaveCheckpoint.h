@@ -18,8 +18,8 @@ public:
 	// PLACE INTERFACE PROPERTIES HERE
 
 	/** This function sets the checkpoint to the given location */
-	void SetCheckpoint(const FVector & location) { }
+	virtual void SetCheckpoint(const FVector & location) = 0;
 
 	/** This function returns the current checkpoint of this entity */
-	FVector GetCheckpoint() { return FVector(0.0f, 0.0f, 0.0f); }
+	virtual FVector GetCheckpoint() = 0;
 };
