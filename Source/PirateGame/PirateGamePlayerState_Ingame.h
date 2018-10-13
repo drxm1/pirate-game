@@ -35,6 +35,12 @@ public:
 	void AddLife();
 
 	UFUNCTION(BlueprintCallable)
+	void SetRemainingLifes(const int value);
+
+	UFUNCTION(BlueprintCallable)
+	int GetRemainingLifes() const;
+
+	UFUNCTION(BlueprintCallable)
 	bool IsGameOver();
 
 	UFUNCTION(BlueprintCallable)

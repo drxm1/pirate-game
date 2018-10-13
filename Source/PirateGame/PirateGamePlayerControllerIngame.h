@@ -20,7 +20,7 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
-	/** Defines how many lifes are left */
+	/** Defines how many lifes are left at the start of the game */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character lifes")
 	uint8 RemainingLifes;
 };

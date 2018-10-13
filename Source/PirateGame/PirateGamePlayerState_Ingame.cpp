@@ -26,6 +26,21 @@ void APirateGamePlayerState_Ingame::AddLife()
 		++RemainingLifes;
 }
 
+void APirateGamePlayerState_Ingame::SetRemainingLifes(const int value)
+{
+	if (value <= 0)
+		RemainingLifes = 0;// Game Over
+	else if (value >= 3)
+		RemainingLifes = 3;// Max Hearts Displayed in Widget
+	else
+		RemainingLifes = value;
+}
+
+int APirateGamePlayerState_Ingame::GetRemainingLifes() const
+{
+	return RemainingLifes;
+}
+
 bool APirateGamePlayerState_Ingame::IsGameOver()
 {
 	return RemainingLifes == 0;

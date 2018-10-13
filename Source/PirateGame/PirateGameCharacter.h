@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
 #include "Interfaces/IHaveCheckpoint.h"
+#include "Interfaces/ICanDie.h"
 #include "PirateGameCharacterInput.h"
 #include "PirateGameCharacter.generated.h"
 
@@ -12,7 +13,10 @@
  * 
  */
 UCLASS()
-class PIRATEGAME_API APirateGameCharacter : public APaperCharacter, public IHaveCheckpoint
+class PIRATEGAME_API APirateGameCharacter
+	: public APaperCharacter
+	, public IHaveCheckpoint
+	, public ICanDie
 {
 	GENERATED_BODY()
 	
@@ -108,5 +112,16 @@ public:
 	void SetCheckpoint(const FVector & location);
 
 	/** This function returns the current checkpoint of this entity */
-	FVector GetCheckpoint();
+	FVector GetCheckpoint() const;
+
+// ICanDie implementation
+public:
+	/** To be called when the Actor's health is zero or lower */
+	virtual void OnDie();
+
+	/** Returns the current health */
+	virtual int GetHealth() const;
+
+	/** Should set the health to a new value. Should also check if the player is dead inside the implementation */
+	virtual void SetHealth(const int value);
 };

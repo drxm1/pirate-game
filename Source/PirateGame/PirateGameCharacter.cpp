@@ -12,6 +12,7 @@
 
 /* Project files */
 #include "PirateGameGameModeBase.h"						// APirateGameGameModeBase
+#include "PirateGamePlayerState_Ingame.h"				// APirateGamePlayerState_Ingame
 
 /** 
  * Constructs a APirateGameCharacter and initializes its values.
@@ -220,7 +221,41 @@ void APirateGameCharacter::SetCheckpoint(const FVector & location)
 /**
  * This function returns the current checkpoint of this entity
  */
-FVector APirateGameCharacter::GetCheckpoint()
+FVector APirateGameCharacter::GetCheckpoint() const
 {
 	return CurrentCheckpoint;
+}
+
+/**
+ * To be called when the Actor's health is zero or lower
+ */
+void APirateGameCharacter::OnDie()
+{
+
+}
+
+/** Returns the current health */
+int APirateGameCharacter::GetHealth() const
+{
+	APirateGamePlayerState_Ingame *const pGameStateIngame = Cast<APirateGamePlayerState_Ingame>(this->GetController()->PlayerState);
+	check(pGameStateIngame);
+
+	return pGameStateIngame->GetRemainingLifes();
+}
+
+/**
+ * Should set the health to a new value. Should also check if the player is dead inside the implementation
+ */
+void APirateGameCharacter::SetHealth(const int value)
+{
+	APirateGamePlayerState_Ingame *const pGameStateIngame = Cast<APirateGamePlayerState_Ingame>(this->GetController()->PlayerState);
+	check(pGameStateIngame);
+
+	pGameStateIngame->SetRemainingLifes(value);
+
+	// We must check if the player is dead
+	if (!IsAlive())
+	{
+		OnDie();
+	}
 }

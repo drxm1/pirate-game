@@ -21,5 +21,5 @@ public:
 	virtual void SetCheckpoint(const FVector & location) = 0;
 
 	/** This function returns the current checkpoint of this entity */
-	virtual FVector GetCheckpoint() = 0;
+	virtual FVector GetCheckpoint() const = 0;
 };

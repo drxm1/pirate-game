@@ -5,7 +5,7 @@
 #include "Components/ShapeComponent.h"
 #include "Components/BoxComponent.h"
 #include "PaperSpriteComponent.h"
-#include "PirateGameCharacter.h"
+// #include "PirateGameCharacter.h"
 #include "Interfaces/IHaveCheckpoint.h"
 
 DEFINE_LOG_CATEGORY(CheckpointBaseLog);
@@ -54,7 +54,7 @@ void ACheckpointBase::OnRadiusEnter(class UPrimitiveComponent* HitComp, class AA
 		actorWithCheckpoint->SetCheckpoint(FVector (location.X, actorWithCheckpoint->GetCheckpoint ().Y, location.Z));
 		
 		const FVector log_set_location = actorWithCheckpoint->GetCheckpoint();
-		UE_LOG(CheckpointBaseLog, Warning, TEXT("Set new Checkpoint for Actor: (%f, %f, %f)"), log_set_location.X, log_set_location.Y, log_set_location.Z);
+		UE_LOG(CheckpointBaseLog, Log, TEXT("Set new Checkpoint for Actor: (%f, %f, %f)"), log_set_location.X, log_set_location.Y, log_set_location.Z);
 	}
 }
 
