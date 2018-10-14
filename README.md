@@ -1,4 +1,4 @@
-# PirateGame-Dev
+# PirateGame
 
 A simple 2d platformer game using UE4 and C++.
 
