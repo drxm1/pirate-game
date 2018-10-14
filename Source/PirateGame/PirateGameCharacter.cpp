@@ -13,8 +13,9 @@
 /* Project files */
 #include "PirateGameGameModeBase.h"						// APirateGameGameModeBase
 #include "PirateGamePlayerState_Ingame.h"				// APirateGamePlayerState_Ingame
+#include "PirateGameGameMode_Ingame.h"					// APirateGameGameMode_Ingame
 
-/** 
+/**
  * Constructs a APirateGameCharacter and initializes its values.
  */
 APirateGameCharacter::APirateGameCharacter()
@@ -238,8 +239,13 @@ void APirateGameCharacter::OnDie()
 	if (gamemode != nullptr)
 	{
 		UGameplayStatics::SetGamePaused(GetWorld(), true);
-		// TODO: show not the pause menu widget but the GameOver widget...
-		// gamemode->ShowPauseMenuWidget(!bIsGamePaused);
+		
+		// Show the game over widget
+		APirateGameGameMode_Ingame *const gamemode = Cast<APirateGameGameMode_Ingame>(GetWorld()->GetAuthGameMode());
+		if (gamemode != nullptr)
+		{
+			gamemode->ShowGameOverMenuWidget();
+		}
 	}
 }
 

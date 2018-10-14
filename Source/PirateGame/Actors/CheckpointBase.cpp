@@ -5,7 +5,7 @@
 #include "Components/ShapeComponent.h"
 #include "Components/BoxComponent.h"
 #include "PaperSpriteComponent.h"
-// #include "PirateGameCharacter.h"
+#include "PirateGameGameMode_Ingame.h"
 #include "Interfaces/IHaveCheckpoint.h"
 
 DEFINE_LOG_CATEGORY(CheckpointBaseLog);
@@ -27,6 +27,9 @@ ACheckpointBase::ACheckpointBase()
 	CheckpointTrigger->bGenerateOverlapEvents = true;
 	CheckpointTrigger->OnComponentBeginOverlap.AddDynamic(this, &ACheckpointBase::OnRadiusEnter);
 	CheckpointTrigger->SetupAttachment(CheckpointRoot);
+
+	// By default, a checkpoint will not end the level
+	bIsEndOfLevel = false;
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +58,15 @@ void ACheckpointBase::OnRadiusEnter(class UPrimitiveComponent* HitComp, class AA
 		
 		const FVector log_set_location = actorWithCheckpoint->GetCheckpoint();
 		UE_LOG(CheckpointBaseLog, Log, TEXT("Set new Checkpoint for Actor: (%f, %f, %f)"), log_set_location.X, log_set_location.Y, log_set_location.Z);
+
+		if (bIsEndOfLevel)
+		{
+			APirateGameGameMode_Ingame *const gamemode = Cast<APirateGameGameMode_Ingame>(GetWorld()->GetAuthGameMode());
+			if (gamemode != nullptr)
+			{
+				gamemode->ShowGameWonMenuWidget();
+			}
+		}
 	}
 }
 

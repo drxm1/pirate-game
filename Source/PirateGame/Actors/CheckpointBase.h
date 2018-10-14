@@ -35,9 +35,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UPaperSpriteComponent* CheckpointSpriteComponent;
 
-	// Not needed:
-	// UPROPERTY(EditAnywhere)
-	// TSubclassOf<AActor> SpecificOverlapActorClass;
+	UPROPERTY(EditAnywhere)
+	bool bIsEndOfLevel;
 
 public:
 	UFUNCTION()
