@@ -7,6 +7,7 @@
 #include "PaperSpriteComponent.h"
 #include "PirateGameGameMode_Ingame.h"
 #include "Interfaces/IHaveCheckpoint.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(CheckpointBaseLog);
 
@@ -65,6 +66,7 @@ void ACheckpointBase::OnRadiusEnter(class UPrimitiveComponent* HitComp, class AA
 			if (gamemode != nullptr)
 			{
 				gamemode->ShowGameWonMenuWidget();
+				UGameplayStatics::SetGamePaused(GetWorld(), true);
 			}
 		}
 	}

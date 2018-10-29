@@ -37,7 +37,7 @@ APirateGameCharacter::APirateGameCharacter()
 
 	// Change the camera feel with the spring arm
 	CameraBoom->bEnableCameraLag = true;
-	CameraBoom->CameraLagSpeed = 0.4f;
+	CameraBoom->CameraLagSpeed = 0.8f;
 
 	// Set up the camera
 	SideViewCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SideViewCamraComponent"));
@@ -69,6 +69,9 @@ APirateGameCharacter::APirateGameCharacter()
 	// Set up collision
 	GetCapsuleComponent()->SetCapsuleHalfHeight(96.0f);
 	GetCapsuleComponent()->SetCapsuleRadius(32.0f);
+
+	// Set some initial state data
+	this->RemainingAirControlBlockingTime = 0.0f;
 }
 
 /** 
@@ -89,6 +92,7 @@ void APirateGameCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	UpdateMovement(DeltaTime);
+	UpdateAirControlBlockingTime(DeltaTime);
 	UpdateRotation();
 	UpdateAnimation();
 }
@@ -128,7 +132,7 @@ void APirateGameCharacter::OnPressedJump()
 	}
 	else
 	{
-		// TODO: A walljump might be possible if a wall is in front (LineTrace check for Wall ? Yes -> Walljump : No : Nothing)
+		PerformWalljumpIfPossible();
 	}
 }
 
@@ -169,6 +173,28 @@ void APirateGameCharacter::UpdateMovement(const float DeltaTime)
 													 CharacterInput.MovementInput.Y * factor,
 													 0.0f);
 	AddMovementInput(DesiredMovementDirection);
+}
+
+/**
+ * Updates the AirControlBlockingTime
+ */
+void APirateGameCharacter::UpdateAirControlBlockingTime(const float DeltaTime)
+{
+	// Substract the passed time from the remaining air-control-blocking-time
+	if (RemainingAirControlBlockingTime > 0.0f)
+	{
+		RemainingAirControlBlockingTime -= DeltaTime;
+		// Reset the air control when the time is over
+		if (RemainingAirControlBlockingTime <= 0.0f)
+		{
+			GetCharacterMovement()->AirControl = InitialAirControlValue;
+		}
+		// Set the air control to a low value if the time is not over
+		else
+		{
+			GetCharacterMovement()->AirControl = 0.1f;
+		}
+	}
 }
 
 /**
@@ -272,5 +298,51 @@ void APirateGameCharacter::SetHealth(const int value)
 	if (!IsAlive())
 	{
 		OnDie();
+	}
+}
+
+/**
+ * Checks by linetrace whether a walljump is possible
+ * and jumps off of the object if possible
+ */
+void APirateGameCharacter::PerformWalljumpIfPossible()
+{
+	auto* cm = this->GetCharacterMovement();
+	check(cm);
+	check(GetCapsuleComponent());
+	check(GetWorld());
+	
+	const FVector actorLocation = this->GetActorLocation();
+	const FVector actorForwardVector = this->GetActorForwardVector();
+	const float capsuleRadius = this->GetCapsuleComponent()->GetScaledCapsuleRadius();
+	const float capsuleRadiusAddition = 5.0f;
+	const float range = capsuleRadius + capsuleRadiusAddition;
+
+	const FVector lineTraceStart = actorLocation - (actorForwardVector * range);
+	const FVector lineTraceEnd = actorLocation + (actorForwardVector * range);
+
+	FHitResult hitResult;
+	FCollisionQueryParams cqp;
+	cqp.AddIgnoredActor(this);
+
+	// Search for an object to jump from by line-trace
+	if (GetWorld()->LineTraceSingleByChannel(hitResult, lineTraceStart, lineTraceEnd, ECC_Visibility, cqp)
+		&& hitResult.GetActor() != nullptr)
+	{
+		/* We found an actor to jump from */
+		FVector launchVelocity;
+		// Left or right depending on where the wall is -> jump away from wall
+		launchVelocity.X = FMath::Sign(actorLocation.X - hitResult.Location.X) * cm->JumpZVelocity;
+		launchVelocity.Z = cm->JumpZVelocity;
+		// Override the z value only when the addition to the current velocity is higher
+		// than the usual jump force
+		const bool bOverrideZValue = this->GetVelocity().Z >= cm->JumpZVelocity ? true : false;
+		/* Add a force to the characters movement. The x and y speed are always overridden,
+		   the z speed only when it would be higher than the usual jump force.
+		   If the z speed isn't higher (for example falling down),
+		   then only add the jump force to the z speed. */
+		this->LaunchCharacter(launchVelocity, true, bOverrideZValue);
+		// Block movement in air by user input for a short amount of time to enable jumping away to the other side
+		this->RemainingAirControlBlockingTime = this->AirControlBlockingTime;
 	}
 }

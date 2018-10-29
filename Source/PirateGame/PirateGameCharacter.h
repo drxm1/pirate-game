@@ -49,10 +49,16 @@ private:
 	/** Action mapping, gets called when the pause command is pressed */
 	void OnPressedPause();
 
+	/** Checks by linetrace whether a walljump is possible and jumps off of the object if possible */
+	void PerformWalljumpIfPossible();
+
 // Functions
 protected:
 	/** Handles unhandled movement input */
 	void UpdateMovement(const float DeltaTime);
+
+	/** Updates the AirControlBlockingTime */
+	void UpdateAirControlBlockingTime(const float DeltaTime);
 
 	/** Update rotation left or right based on the player movement. 
 		Sets the rotation so that the character faces his direction of travel. */
@@ -67,9 +73,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character properties")
 	float MovementSpeed;
 
-	// Maybe used later
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character properties")
-	// float WalljumpRange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character properties")
+	float WalljumpRange;
+
+	/** The initial air control of the movement component. Even if the value of the movement component is changed in blueprints, this value will be set to that value in the constructor. */
+	float InitialAirControlValue;
+
+	/** Determines for how long the players air movement is lowered after a wall jump */
+	const float AirControlBlockingTime = 0.5f;
+
+	/** The timer to count down how long the air control is still blocked */
+	float RemainingAirControlBlockingTime;
 
 protected:
 	/** Input class used to validate axis-mapped inputs */
