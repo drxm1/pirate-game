@@ -20,7 +20,7 @@ ARelocateAreaBase::ARelocateAreaBase()
 
 	RelocateTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("RelocateTrigger"));
 	RelocateTrigger->SetWorldScale3D(FVector(4.0f, 10.0f, 2.0f));
-	RelocateTrigger->bGenerateOverlapEvents = true;
+	RelocateTrigger->SetGenerateOverlapEvents(true);
 	RelocateTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARelocateAreaBase::OnRadiusEnter);
 	RelocateTrigger->SetupAttachment(RelocateAreaRoot);
 }

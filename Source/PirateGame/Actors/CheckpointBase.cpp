@@ -25,7 +25,7 @@ ACheckpointBase::ACheckpointBase()
 
 	CheckpointTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("CheckpointTrigger"));
 	CheckpointTrigger->SetWorldScale3D(FVector(1.0f, 10.0f, 2.0f));
-	CheckpointTrigger->bGenerateOverlapEvents = true;
+	CheckpointTrigger->SetGenerateOverlapEvents(true);
 	CheckpointTrigger->OnComponentBeginOverlap.AddDynamic(this, &ACheckpointBase::OnRadiusEnter);
 	CheckpointTrigger->SetupAttachment(CheckpointRoot);
 
