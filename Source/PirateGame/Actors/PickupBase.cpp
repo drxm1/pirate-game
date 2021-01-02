@@ -21,7 +21,7 @@ APickupBase::APickupBase()
 
 	PickupTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("PickupTrigger"));
 	PickupTrigger->SetWorldScale3D(FVector(1.0f, 10.0f, 1.0f));
-	PickupTrigger->bGenerateOverlapEvents = true;
+	PickupTrigger->SetGenerateOverlapEvents(true);
 	PickupTrigger->OnComponentBeginOverlap.AddDynamic(this, &APickupBase::OnRadiusEnter);
 	PickupTrigger->SetupAttachment(PickupRoot);
 }

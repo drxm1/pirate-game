@@ -30,9 +30,9 @@ APirateGameCharacter::APirateGameCharacter()
 	CameraBoom->TargetArmLength = 500.0f;
 	CameraBoom->bDoCollisionTest = false;
 	CameraBoom->bEnableCameraRotationLag = false;
-	CameraBoom->bAbsoluteRotation = true;
+	CameraBoom->SetUsingAbsoluteRotation( true);
 	CameraBoom->bUsePawnControlRotation = false;
-	CameraBoom->RelativeRotation = FRotator(0.0f, -90.0f, 0.0f);
+	CameraBoom->SetRelativeRotation_Direct(FRotator(0.0f, -90.0f, 0.0f));
 	CameraBoom->SocketOffset = FVector(0.0f, 0.0f, 75.0f);
 
 	// Change the camera feel with the spring arm
